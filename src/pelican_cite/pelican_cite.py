@@ -12,6 +12,7 @@ Based on teh Pelican BibTeX plugin written by Vlad Niculae <vlad@vene.ro>
 import logging
 import re
 import sys
+import os
 
 try:
     from pybtex.database.input.bibtex import Parser
@@ -107,7 +108,8 @@ def get_bib_file(article):
     if 'publications_src' in article.metadata:
         refs_file = article.metadata['publications_src']
         try:
-            local_bib = Parser().parse_file(refs_file)
+            logger.warning(f"Looking for bib file at {os.path.dirname(article.source_path) + os.path.sep + refs_file}")
+            local_bib = Parser().parse_file(os.path.dirname(article.source_path) + os.path.sep + refs_file)
             return local_bib
         except PybtexError as e:
             logger.warning('`pelican_bibtex` failed to parse file %s: %s' % (
